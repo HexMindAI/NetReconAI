@@ -1,3 +1,4 @@
+
 from dns_scanner import scan_dns
 from web_scanner import scan_website
 from port_scanner import scan_common_ports
@@ -203,13 +204,14 @@ def main():
         ai_results
     )
 
-    # Generate JSON report
+    # Generate JSON report with AI analysis
     report_file = generate_report(
         domain,
         dns_results,
         web_results,
         port_results,
-        risk_results
+        risk_results,
+        ai_results
     )
 
     print(

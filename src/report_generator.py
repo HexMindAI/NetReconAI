@@ -3,7 +3,14 @@ import os
 from datetime import datetime
 
 
-def generate_report(domain, dns_results, web_results, port_results, risk_results):
+def generate_report(
+    domain,
+    dns_results,
+    web_results,
+    port_results,
+    risk_results,
+    ai_results
+):
 
     report = {
         "target": domain,
@@ -11,7 +18,12 @@ def generate_report(domain, dns_results, web_results, port_results, risk_results
         "dns": dns_results,
         "website": web_results,
         "ports": port_results,
-        "security": risk_results
+        "security": risk_results,
+        "ai_analysis": {
+            "risk_level": ai_results.get("risk_level", "UNKNOWN"),
+            "risk_score": ai_results.get("risk_score", 0),
+            "explanations": ai_results.get("explanations", [])
+        }
     }
 
     os.makedirs("reports", exist_ok=True)
