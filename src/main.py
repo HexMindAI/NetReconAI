@@ -3,9 +3,17 @@ from web_scanner import scan_website
 from port_scanner import scan_common_ports
 from risk_analyzer import analyze_risk
 from report_generator import generate_report
+from ai_analyzer import generate_security_explanation
 
 
-def print_results(domain, dns_results, web_results, port_results, risk_results):
+def print_results(
+    domain,
+    dns_results,
+    web_results,
+    port_results,
+    risk_results,
+    ai_results
+):
 
     print("\n" + "=" * 60)
     print("                 NETRECONAI")
@@ -105,6 +113,41 @@ def print_results(domain, dns_results, web_results, port_results, risk_results):
     else:
         print("  [+] No findings from current checks.")
 
+    # AI-Assisted Security Explanation
+    print("\n[AI-ASSISTED SECURITY EXPLANATION]")
+
+    print(
+        f"  Risk Level: {ai_results['risk_level']}"
+    )
+
+    print(
+        f"  Risk Score: {ai_results['risk_score']}"
+    )
+
+    if ai_results["explanations"]:
+
+        for index, item in enumerate(
+            ai_results["explanations"],
+            start=1
+        ):
+            print(f"\n  Finding {index}:")
+            print(f"    {item['finding']}")
+
+            print("\n    Explanation:")
+            print(
+                f"    {item['explanation']}"
+            )
+
+            print("\n    Recommendation:")
+            print(
+                f"    {item['recommendation']}"
+            )
+
+    else:
+        print(
+            "  [+] No security findings require explanation."
+        )
+
     print("\n" + "=" * 60)
     print("             Analysis completed.")
     print("=" * 60)
@@ -145,13 +188,19 @@ def main():
         port_results
     )
 
+    # AI-Assisted Explanation
+    ai_results = generate_security_explanation(
+        risk_results
+    )
+
     # Display results
     print_results(
         domain,
         dns_results,
         web_results,
         port_results,
-        risk_results
+        risk_results,
+        ai_results
     )
 
     # Generate JSON report
@@ -163,7 +212,9 @@ def main():
         risk_results
     )
 
-    print(f"\n[+] JSON report saved to: {report_file}")
+    print(
+        f"\n[+] JSON report saved to: {report_file}"
+    )
 
 
 if __name__ == "__main__":
